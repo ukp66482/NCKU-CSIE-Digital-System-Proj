@@ -18,7 +18,6 @@ Under what circumstances does BRAM use byte addressing, and when does it use wor
 
 In this design, which addressing mode does our BRAM use, and how do we set the BRAM address to match this addressing scheme?
 
-
 ## Q3.
 Briefly describe what memory-mapped I/O is, 
 and explain what happens if I access (read or write) a GPIO memory-mapped address? 
