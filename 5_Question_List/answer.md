@@ -184,19 +184,21 @@ As shown in the timing report, net delay (interconnect delay) accounts for the m
 ![waveform](./pic/waveform.png)
 
 ## Q7
-An AXI interconnect is an IP block that routes AXI transactions to different slave interfaces based on the address.
-
-In this design, AXI SmartConnect is used on the path connected to the HP port because the HP port operates with a 64-bit AXI data width, while the BRAM controllers connected downstream use a 32-bit AXI interface.
-
-As a result, data width conversion is required between the 64-bit HP port and the 32-bit BRAM-based memory system. AXI SmartConnect can automatically handle AXI data width conversion, burst adaptation, and protocol management, making it suitable for this high-performance memory path.
-
-In contrast, the simpler AXI Interconnect is sufficient for paths where the AXI data widths are consistent and no conversion is needed.
+Although both `AXI Interconnect` and `AXI SmartConnect` can connect AXI memory-mapped masters and slaves, SmartConnect is more tightly integrated with Vivado and is **better optimized for high-bandwidth data paths**, while `AXI Interconnect` is sufficient for simple control-oriented connections.
 
 ![axi_interconnect](./pic/axi_interconnect.png)
 
-![BUS_WIDTH](./pic/BUS_WIDTH.png)
+In this design, the AXI CDMA is used for high-throughput memory transfers through the HP ports, which are configured with a 64-bit data width.
+To fully utilize this wide data path, the interconnect must meet tight timing requirements and support high-frequency operation.
+
+AXI SmartConnect automatically inserts pipelining and optimizes the interconnect fabric for critical high-bandwidth paths, improving timing closure and allowing the AXI CDMA to operate at higher clock frequencies.
+
+Therefore, SmartConnect is selected for the CDMA data path to achieve higher performance, while a simple AXI Interconnect is sufficient for low-speed control transactions.
+
+(In this design, all clocks are set to 100 MHz to simplify the system and make it easier for beginners to understand. In practical high-performance systems, DMA-related clocks are typically run at higher frequencies to further improve throughput.)
 
 ## Ref
 https://discuss.pynq.io/t/pynq-to-bram-weird-bram-addressing/937/5
+
 
 https://www.reddit.com/r/FPGA/comments/4chizo/deleted_by_user/
